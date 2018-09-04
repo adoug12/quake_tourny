@@ -9,8 +9,6 @@ router.get('/search/:alias', (req, res) => {
     .catch(err => res.json(err));
 });
 
-// @route GET api/stats/player/:alias
-// @desc Retrieves a player's stats using the supplied alias
 router.get('/player/:alias', (req, res) => {
   quakestats
     .player(req.params.alias)
@@ -18,16 +16,23 @@ router.get('/player/:alias', (req, res) => {
     .catch(err => res.json(err));
 });
 
-router.get('/games/:alias', (req, res) => {
-  quakestats
-    .games(req.params.alias)
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
+// router.get('/games/:alias', (req, res) => {
+//   quakestats
+//     .games(req.params.alias)
+//     .then(data => res.json(data))
+//     .catch(err => res.json(err));
+// });
 
-router.get('/game', (req, res) => {
+// router.get('/game/:id', (req, res) => {
+//   quakestats
+//     .game(req.params.id)
+//     .then(data => res.json(data))
+//     .catch(err => res.json(err));
+// });
+
+router.get('/matchupHistory', (req, res) => {
   quakestats
-    .game(req.query.id, req.query.name)
+    .matchupHistory(req.query.alias1, req.query.alias2)
     .then(data => res.json(data))
     .catch(err => res.json(err));
 });
