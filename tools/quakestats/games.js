@@ -11,4 +11,14 @@ const games = alias => {
     .catch(err => err);
 };
 
-module.exports = games;
+const game = (id, alias) => {
+  const endpoint = `${apiEndpoint}/Player/Games`;
+  const query = `?id=${id}&playerName=${alias}`;
+  const url = `${endpoint}${query}`;
+  return axios
+    .get(url)
+    .then(res => res.data)
+    .catch(err => err);
+};
+
+module.exports = { games, game };

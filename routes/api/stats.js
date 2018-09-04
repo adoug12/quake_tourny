@@ -25,4 +25,11 @@ router.get('/games/:alias', (req, res) => {
     .catch(err => res.json(err));
 });
 
+router.get('/game', (req, res) => {
+  quakestats
+    .game(req.query.id, req.query.name)
+    .then(data => res.json(data))
+    .catch(err => res.json(err));
+});
+
 module.exports = router;
