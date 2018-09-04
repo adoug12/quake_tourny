@@ -18,4 +18,11 @@ router.get('/player/:alias', (req, res) => {
     .catch(err => res.json(err));
 });
 
+router.get('/games/:alias', (req, res) => {
+  quakestats
+    .games(req.params.alias)
+    .then(data => res.json(data))
+    .catch(err => res.json(err));
+});
+
 module.exports = router;
