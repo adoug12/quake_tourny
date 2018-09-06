@@ -4,9 +4,16 @@ const tournament = require('../../tools/challonge').tournament;
 const participant = require('../../tools/challonge').participant;
 const match = require('../../tools/challonge').match;
 
+router.get('/', (req, res) => {
+  tournament
+    .getAll()
+    .then(data => res.json(data))
+    .catch(err => res.json(err));
+});
+
 router.get('/:id', (req, res) => {
   tournament
-    .get(Number(req.params.id))
+    .get(req.params.id)
     .then(data => res.json(data))
     .catch(err => res.json(err));
 });

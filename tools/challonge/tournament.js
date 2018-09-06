@@ -3,6 +3,14 @@ const apiEndpoint = require('./config').apiEndpoint;
 
 const endpoint = `${apiEndpoint}/tournaments`;
 
+const getAll = () => {
+  const url = `${endpoint}.json`;
+  return axios
+    .get(url)
+    .then(res => res.data)
+    .catch(err => err.response.data);
+};
+
 const get = id => {
   const url = `${endpoint}/${id}.json`;
   return axios
@@ -43,4 +51,4 @@ const finalize = id => {
     .catch(err => err.response.data);
 };
 
-module.exports = { get, create, processCheckIns, start, finalize };
+module.exports = { getAll, get, create, processCheckIns, start, finalize };
