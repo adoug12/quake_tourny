@@ -1,5 +1,5 @@
 const axios = require('axios');
-const apiEndpoint = require('./common').apiEndpoint;
+const apiEndpoint = require('./config').apiEndpoint;
 
 const player = alias => {
   const endpoint = `${apiEndpoint}/Player/Stats`;

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const apiEndpoint = require('./common').apiEndpoint;
+const apiEndpoint = require('./config').apiEndpoint;
 
 const matchupHistory = (alias1, alias2) => {
   // Get game history of first player as array

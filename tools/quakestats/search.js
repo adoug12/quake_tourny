@@ -1,5 +1,5 @@
 const axios = require('axios');
-const apiEndpoint = require('./common').apiEndpoint;
+const apiEndpoint = require('./config').apiEndpoint;
 
 const search = name => {
   const endpoint = `${apiEndpoint}/Player/Search`;
