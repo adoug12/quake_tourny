@@ -5,6 +5,7 @@ import store from './store';
 
 import Header from './components/layout/Header';
 import TournamentForm from './components/forms/TournamentForm';
+import Dashboard from './components/admin/Dashboard';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ class App extends Component {
             <Header />
             <div className="container">
               <Route exact path="/" component={TournamentForm} />
+              <Route exact path="/tournament/:id/admin" component={Dashboard} />
             </div>
           </div>
         </Router>

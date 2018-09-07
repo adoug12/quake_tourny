@@ -15,7 +15,7 @@ const get = id => {
   const url = `${endpoint}/${id}.json`;
   return axios
     .get(url)
-    .then(res => res.data)
+    .then(res => res.data.tournament)
     .catch(err => err.response.data);
 };
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const tournament = require('../../tools/challonge').tournament;
 const participant = require('../../tools/challonge').participant;
 const match = require('../../tools/challonge').match;
+const quakestats = require('../../tools/quakestats');
 
 router.get('/', (req, res) => {
   tournament
@@ -12,9 +13,31 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+  // get tournament data
   tournament
     .get(req.params.id)
-    .then(data => res.json(data))
+    .then(info => {
+      //get participants and matches
+      Promise.all([participant.getAll(info.id), match.getAll(info.id)]).then(
+        ([participants, matches]) => {
+          //get stats of all participants and add them to the participants data
+          Promise.all(
+            participants.map(player =>
+              quakestats
+                .player(player.name)
+                .then(stats => ({ ...player, stats }))
+            )
+            // send data
+          ).then(players =>
+            res.json({
+              info,
+              matches,
+              players
+            })
+          );
+        }
+      );
+    })
     .catch(err => res.json(err));
 });
 

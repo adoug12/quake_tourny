@@ -15,7 +15,7 @@ const getAll = id => {
   const url = `${endpoint}${id}/participants.json`;
   return axios
     .get(url)
-    .then(res => res.data)
+    .then(res => res.data.map(player => player.participant))
     .catch(err => err.response.data);
 };
 
