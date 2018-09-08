@@ -7,7 +7,7 @@ const getAll = id => {
   const url = `${endpoint}${id}/matches.json`;
   return axios
     .get(url)
-    .then(res => res.data)
+    .then(res => res.data.map(match => match.match))
     .catch(err => err.response.data);
 };
 

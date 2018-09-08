@@ -16,6 +16,7 @@ export default (state = initialState, action) => {
       };
     case GET_TOURNAMENT:
       return {
+        ...state,
         info: action.payload.info,
         matches: action.payload.matches,
         players: action.payload.players,

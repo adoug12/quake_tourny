@@ -6,6 +6,7 @@ import store from './store';
 import Header from './components/layout/Header';
 import TournamentForm from './components/forms/TournamentForm';
 import Dashboard from './components/admin/Dashboard';
+import Brackets from './components/brackets/Brackets';
 
 import './App.css';
 
@@ -15,10 +16,11 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <Header />
             <div className="container">
+              <Header />
               <Route exact path="/" component={TournamentForm} />
               <Route exact path="/tournament/:id/admin" component={Dashboard} />
+              <Route exact path="/tournament/:id" component={Brackets} />
             </div>
           </div>
         </Router>

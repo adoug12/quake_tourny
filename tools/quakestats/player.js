@@ -8,7 +8,6 @@ const player = alias => {
   return axios
     .get(url)
     .then(res => ({
-      alias: res.data.name,
       duelRating: res.data.playerRatings.duel.rating,
       level: res.data.playerLevelState.level,
       gamesCount: res.data.playerRatings.duel.gamesCount,

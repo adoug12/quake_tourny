@@ -15,7 +15,16 @@ const getAll = id => {
   const url = `${endpoint}${id}/participants.json`;
   return axios
     .get(url)
-    .then(res => res.data.map(player => player.participant))
+    .then(res =>
+      res.data.map(player => ({
+        id: player.participant.id,
+        name: player.participant.name,
+        seed: player.participant.seed,
+        active: player.participant.active,
+        final_rank: player.participant.final_rank,
+        checked_in: player.participant.checked_in
+      }))
+    )
     .catch(err => err.response.data);
 };
 

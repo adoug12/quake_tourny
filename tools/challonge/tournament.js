@@ -15,7 +15,17 @@ const get = id => {
   const url = `${endpoint}/${id}.json`;
   return axios
     .get(url)
-    .then(res => res.data.tournament)
+    .then(res => ({
+      id: res.data.tournament.id,
+      name: res.data.tournament.name,
+      description: res.data.tournament.description,
+      started_at: res.data.tournament.started_at,
+      completed_at: res.data.tournament.completed_at,
+      state: res.data.tournament.state,
+      signup_cap: res.data.tournament.signup_cap,
+      check_in_duration: res.data.tournament.check_in_duration,
+      start_at: res.data.tournament.start_at
+    }))
     .catch(err => err.response.data);
 };
 
