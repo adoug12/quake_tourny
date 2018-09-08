@@ -29,10 +29,17 @@ const getAll = id => {
 };
 
 const get = ({ id, playerId }) => {
-  const url = `${endpoint}${id}/participants/${playerId}.json/?include_matches=1`;
+  const url = `${endpoint}${id}/participants/${playerId}.json`;
   return axios
     .get(url)
-    .then(res => res.data)
+    .then(res => ({
+      id: res.data.participant.id,
+      name: res.data.participant.name,
+      seed: res.data.participant.seed,
+      active: res.data.participant.active,
+      final_rank: res.data.participant.final_rank,
+      checked_in: res.data.participant.checked_in
+    }))
     .catch(err => err.response.data);
 };
 

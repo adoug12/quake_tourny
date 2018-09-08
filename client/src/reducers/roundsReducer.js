@@ -1,18 +1,18 @@
-import { GET_TOURNAMENT, TOURNAMENT_LOADING } from '../actions/types';
+import { GET_ROUNDS, ROUNDS_LOADING } from '../actions/types';
 
 const initialState = {
-  data: {},
+  data: [],
   loading: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case TOURNAMENT_LOADING:
+    case ROUNDS_LOADING:
       return {
         ...state,
         loading: true
       };
-    case GET_TOURNAMENT:
+    case GET_ROUNDS:
       return {
         data: action.payload,
         loading: false

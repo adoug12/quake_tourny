@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { signUp } from '../../actions/tournamentActions';
+import { signUp } from '../../actions/participantsActions';
 
 class SignupForm extends Component {
   constructor() {
@@ -40,7 +40,7 @@ class SignupForm extends Component {
   signUpOnClick() {
     this.searchPlayer(this.state.name).then(players => {
       if (players.find(name => name === this.state.name)) {
-        this.props.signUp(this.props.info.id, this.state.name);
+        this.props.signUp(this.props.tournament.data.id, this.state.name);
         this.setState({
           name: ''
         });
@@ -83,15 +83,11 @@ class SignupForm extends Component {
 
 SignupForm.propTypes = {
   signUp: PropTypes.func.isRequired,
-  info: PropTypes.object.isRequired,
-  matches: PropTypes.array.isRequired,
-  players: PropTypes.array.isRequired
+  tournament: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  info: state.tournament.info,
-  matches: state.tournament.matches,
-  players: state.tournament.players
+  tournament: state.tournament.info
 });
 
 export default connect(

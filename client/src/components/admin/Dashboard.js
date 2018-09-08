@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
+import { getParticipants } from '../../actions/participantsActions';
 import {
   getTournament,
   processCheckins,
@@ -24,30 +25,32 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.props.getTournament(this.props.match.params.id);
+    this.props.getParticipants(this.props.match.params.id);
   }
 
   processCheckinsOnClick() {
-    this.props.processCheckins(this.props.info.id);
+    this.props.processCheckins(this.props.tournament.data.id);
   }
 
   startOnClick() {
-    this.props.startTournament(this.props.info.id);
+    this.props.startTournament(this.props.tournament.data.id);
   }
 
   finalizeOnClick() {
-    this.props.finalizeTournament(this.props.info.id);
+    this.props.finalizeTournament(this.props.tournament.data.id);
   }
 
   render() {
-    const startTime = moment(this.props.info.start_at);
-    const checkinTime = moment(this.props.info.start_at).subtract(
-      this.props.info.check_in_duration,
+    const tournament = this.props.tournament.data;
+    const startTime = moment(tournament.start_at);
+    const checkinTime = moment(tournament.start_at).subtract(
+      tournament.check_in_duration,
       'minutes'
     );
 
     let dashboardContent;
 
-    if (this.props.loading) {
+    if (this.props.tournament.loading) {
       dashboardContent = <Spinner />;
     } else {
       dashboardContent = (
@@ -55,7 +58,7 @@ class Dashboard extends Component {
           <div className="row">
             <div className="col-md-12">
               <h4>
-                {this.props.info.name} - {this.props.info.state}
+                {tournament.name} - {tournament.state}
               </h4>
               <p>
                 {startTime.format('MMMM Do YYYY')}
@@ -65,8 +68,8 @@ class Dashboard extends Component {
                 Checkins Open: {checkinTime.format('h:mm a')}
               </p>
               <Participants />
-              {(this.props.info.state === 'pending' ||
-                this.props.info.state === 'checking_in') && <SignupForm />}
+              {(tournament.state === 'pending' ||
+                tournament.state === 'checking_in') && <SignupForm />}
             </div>
           </div>
           <div className="row">
@@ -75,9 +78,7 @@ class Dashboard extends Component {
                 type="button"
                 className="btn btn-primary mr-1"
                 onClick={this.processCheckinsOnClick}
-                disabled={
-                  this.props.info.state === 'checking_in' ? true : false
-                }
+                disabled={tournament.state === 'checking_in' ? true : false}
               >
                 Process Check-Ins
               </button>
@@ -85,7 +86,7 @@ class Dashboard extends Component {
                 type="button"
                 className="btn btn-success mr-1"
                 onClick={this.startOnClick}
-                disabled={this.props.info.state === 'checked_in' ? false : true}
+                disabled={tournament.state === 'checked_in' ? false : true}
               >
                 Start
               </button>
@@ -93,7 +94,7 @@ class Dashboard extends Component {
                 type="button"
                 className="btn btn-danger mr-1"
                 onClick={this.finalizeOnClick}
-                disabled={this.props.info.started_at ? false : true}
+                disabled={tournament.started_at ? false : true}
               >
                 Finalize
               </button>
@@ -108,26 +109,22 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   getTournament: PropTypes.func.isRequired,
+  getParticipants: PropTypes.func.isRequired,
   processCheckins: PropTypes.func.isRequired,
   startTournament: PropTypes.func.isRequired,
   finalizeTournament: PropTypes.func.isRequired,
-  info: PropTypes.object.isRequired,
-  matches: PropTypes.array.isRequired,
-  players: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired
+  tournament: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  info: state.tournament.info,
-  matches: state.tournament.matches,
-  players: state.tournament.players,
-  loading: state.tournament.loading
+  tournament: state.tournament
 });
 
 export default connect(
   mapStateToProps,
   {
     getTournament,
+    getParticipants,
     processCheckins,
     startTournament,
     finalizeTournament

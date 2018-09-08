@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import { checkin, checkout, seed } from '../../actions/tournamentActions';
+import { checkin, checkout, seed } from '../../actions/participantsActions';
+
+import Spinner from '../Spinner';
 
 class Participants extends Component {
   constructor() {
@@ -14,83 +15,90 @@ class Participants extends Component {
   }
 
   checkinOnClick(playerId) {
-    this.props.checkin(this.props.info.id, playerId);
+    this.props.checkin(this.props.tournament.data.id, playerId);
   }
 
   checkoutOnClick(playerId) {
-    this.props.checkout(this.props.info.id, playerId);
+    this.props.checkout(this.props.tournament.data.id, playerId);
   }
 
   seedUpOnClick(playerId, seed) {
     if (seed > 1) {
       seed--;
-      this.props.seed(this.props.info.id, playerId, seed);
+      this.props.seed(this.props.tournament.data.id, playerId, seed);
     }
   }
 
   seedDownOnClick(playerId, seed) {
-    if (seed < this.props.players.length) {
+    if (seed < this.props.participants.data.length) {
       seed++;
-      this.props.seed(this.props.info.id, playerId, seed);
+      this.props.seed(this.props.tournament.data.id, playerId, seed);
     }
   }
 
   render() {
-    const checkinTime = moment(this.props.info.start_at).subtract(
-      this.props.info.check_in_duration,
-      'minutes'
-    );
-    return (
-      <table className="table table-striped table-borderless">
-        <thead>
-          <tr>
-            <th scope="col">Seed</th>
-            <th scope="col">Name</th>
-            <th scope="col">Rating</th>
-            {moment().isAfter(checkinTime) && <th scope="col">Check-In</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {this.props.players.map(player => (
-            <tr key={player.id}>
-              <td>
-                <i
-                  className="btn fas fa-angle-up"
-                  onClick={() => this.seedUpOnClick(player.id, player.seed)}
-                />{' '}
-                {player.seed}{' '}
-                <i
-                  className="btn fas fa-angle-down"
-                  onClick={() => this.seedDownOnClick(player.id, player.seed)}
-                />
-              </td>
-              <td>{player.name}</td>
-              <td>{player.stats.duelRating}</td>
-              {moment().isAfter(checkinTime) && (
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-success btn-sm"
-                    onClick={e => this.checkinOnClick(player.id)}
-                    disabled={player.checked_in}
-                  >
-                    <i className="fas fa-check" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger btn-sm"
-                    onClick={e => this.checkoutOnClick(player.id)}
-                    disabled={!player.checked_in}
-                  >
-                    <i className="fas fa-times" />
-                  </button>
-                </td>
+    const participants = this.props.participants.data;
+
+    let participantsContent;
+
+    if (this.props.participants.loading) {
+      participantsContent = <Spinner />;
+    } else {
+      participantsContent = (
+        <table className="table table-striped table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">Seed</th>
+              <th scope="col">Name</th>
+              <th scope="col">Rating</th>
+              {this.props.tournament.data.state === 'checking_in' && (
+                <th scope="col">Check-In</th>
               )}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    );
+          </thead>
+          <tbody>
+            {participants.map(player => (
+              <tr key={player.id}>
+                <td>
+                  <i
+                    className="btn fas fa-angle-up"
+                    onClick={() => this.seedUpOnClick(player.id, player.seed)}
+                  />{' '}
+                  {player.seed}{' '}
+                  <i
+                    className="btn fas fa-angle-down"
+                    onClick={() => this.seedDownOnClick(player.id, player.seed)}
+                  />
+                </td>
+                <td>{player.name}</td>
+                <td>{player.duelRating}</td>
+                {this.props.tournament.data.state === 'checking_in' && (
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-success btn-sm"
+                      onClick={e => this.checkinOnClick(player.id)}
+                      disabled={player.checked_in}
+                    >
+                      <i className="fas fa-check" />
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      onClick={e => this.checkoutOnClick(player.id)}
+                      disabled={!player.checked_in}
+                    >
+                      <i className="fas fa-times" />
+                    </button>
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    }
+    return <div>{participantsContent}</div>;
   }
 }
 
@@ -98,15 +106,13 @@ Participants.propTypes = {
   checkin: PropTypes.func.isRequired,
   checkout: PropTypes.func.isRequired,
   seed: PropTypes.func.isRequired,
-  info: PropTypes.object.isRequired,
-  matches: PropTypes.array.isRequired,
-  players: PropTypes.array.isRequired
+  participants: PropTypes.object.isRequired,
+  tournament: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  info: state.tournament.info,
-  matches: state.tournament.matches,
-  players: state.tournament.players
+  tournament: state.tournament,
+  participants: state.participants
 });
 
 export default connect(
