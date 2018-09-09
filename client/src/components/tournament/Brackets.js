@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getTournament } from '../../actions/tournamentActions';
-import { getParticipants } from '../../actions/participantsActions';
+import PropTypes from 'prop-types';
 import { getRounds } from '../../actions/roundsActions';
 
 import Spinner from '../Spinner';
@@ -12,10 +10,9 @@ class Brackets extends Component {
     super();
     this.getPlayerName = this.getPlayerName.bind(this);
   }
+
   componentDidMount() {
-    this.props.getTournament(this.props.match.params.id);
-    this.props.getParticipants(this.props.match.params.id);
-    this.props.getRounds(this.props.match.params.id);
+    this.props.getRounds(this.props.id);
   }
 
   getPlayerName(id) {
@@ -23,17 +20,13 @@ class Brackets extends Component {
   }
 
   render() {
-    const rounds = this.props.rounds.data;
-
-    if (
-      this.props.rounds.loading ||
-      this.props.participants.loading ||
-      this.props.tournament.loading
-    ) {
+    if (this.props.rounds.loading) {
       return <Spinner />;
     } else {
+      const rounds = this.props.rounds.data;
+
       return (
-        <div className="bracket-container">
+        <div className="bracket-container border-left border-right border-bottom">
           {rounds.map((round, index) => (
             <div className="bracket-level" key={index}>
               {round.map(match => {
@@ -69,21 +62,17 @@ class Brackets extends Component {
 }
 
 Brackets.propTypes = {
-  getTournament: PropTypes.func.isRequired,
-  getParticipants: PropTypes.func.isRequired,
-  getRounds: PropTypes.func.isRequired,
-  tournament: PropTypes.object.isRequired,
   participants: PropTypes.object.isRequired,
-  rounds: PropTypes.object.isRequired
+  rounds: PropTypes.object.isRequired,
+  getRounds: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  tournament: state.tournament,
   participants: state.participants,
   rounds: state.rounds
 });
 
 export default connect(
   mapStateToProps,
-  { getTournament, getParticipants, getRounds }
+  { getRounds }
 )(Brackets);

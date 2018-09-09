@@ -9,19 +9,12 @@ body > #root > div {
   height: 100vh;
 }
 
-.container {
-  height: 30%;
+.form-container {
+  max-width: 700px;
 }
 
-.header {
-  height: 10%;
-}
-
-.header > h1 {
-  margin: auto;
-  text-align: center;
-  font-family: 'Dosis', sans-serif;
-  color: #205060;
+.tournament-container {
+  height: 100%;
 }
 
 .bracket-container {
@@ -29,7 +22,7 @@ body > #root > div {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 90%;
+  height: 80%;
   width: 100%;
 }
 
@@ -43,10 +36,6 @@ body > #root > div {
   transition: all ease 0.5s;
 }
 
-.bracket-level:hover {
-  width: 200%;
-}
-
 .bracket-matchup {
   width: 90%;
   margin: auto;
@@ -55,6 +44,10 @@ body > #root > div {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.bracket-matchup:hover {
+  cursor: pointer;
 }
 
 .bracket-team {
@@ -95,23 +88,4 @@ body > #root > div {
 .winner > .bracket-score {
   font-weight: bold;
   color: #d07030;
-}
-
-.bracket-team:hover {
-  background-color: #e8e8e8;
-  height: 100%;
-  transition: all ease 0.5s;
-}
-
-.bracket-team:hover > .bracket-name {
-  overflow: none;
-  text-overflow: clip;
-  white-space: normal;
-  line-height: 1em;
-  align-self: center;
-  width: 100%;
-}
-
-.bracket-team:hover > .bracket-score {
-  display: none;
 }

@@ -53,7 +53,7 @@ class TournamentForm extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="container">
+      <div className="container form-container">
         <div className="row">
           <div className="col-md-8 m-auto">
             <p className="lead text-center">Create your Tournament</p>
