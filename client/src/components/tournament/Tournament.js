@@ -30,7 +30,7 @@ class Tournament extends Component {
         this.state.tab === 'brackets' ? (
           <Brackets id={this.props.match.params.id} />
         ) : (
-          <Participants participants={this.props.participants} />
+          <Participants />
         );
     }
     if (this.props.tournament.loading) {

@@ -1,156 +1,106 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
 import Spinner from '../Spinner';
-import { Chart } from 'react-google-charts';
+import RatingGauge from './RatingGauge';
+import KillPie from './KillPie';
+import DamagePie from './DamagePie';
+import AccuracyChart from './AccuracyChart';
 
-export default props => {
-  const options = {
-    width: 400,
-    height: 120,
-    redFrom: 2500,
-    redTo: 3000,
-    yellowFrom: 2200,
-    yellowTo: 2500,
-    minorTicks: 5,
-    max: 3000
-  };
+class Participants extends Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedPlayer: {}
+    };
+    this.playerOnClick = this.playerOnClick.bind(this);
+  }
 
-  let players = props.participants.data;
+  componentWillMount() {
+    this.setState({ selectedPlayer: this.props.participants.data[0] });
+  }
 
-  let gaugeData = [['Label', 'Value'], ['Rating', players[0].duelRating]];
+  playerOnClick(playerName) {
+    this.setState({
+      selectedPlayer: this.props.participants.data.find(
+        player => player.name === playerName
+      )
+    });
+  }
+  render() {
+    const colors = [
+      '#EED859',
+      '#EED859',
+      '#FFAD43',
+      '#FFAD43',
+      '#4078D5',
+      '#4078D5',
+      '#AD2F22',
+      '#2BA9A5',
+      '#1BB31E',
+      '#86952D'
+    ];
 
-  let columnData = [
-    ['Weapon', 'Accuracy', { role: 'style' }],
-    [
-      'MG',
-      (players[0].weaponStats.MACHINEGUN.hits * 100) /
-        players[0].weaponStats.MACHINEGUN.shots,
-      '#b87333'
-    ],
-    [
-      'HMG',
-      (players[0].weaponStats.MACHINEGUN_GRADE1.hits * 100) /
-        players[0].weaponStats.MACHINEGUN_GRADE1.shots,
-      '#b87333'
-    ],
-    [
-      'SG',
-      (players[0].weaponStats.SHOTGUN.hits * 100) /
-        players[0].weaponStats.SHOTGUN.shots,
-      '#b87333'
-    ],
-    [
-      'SSG',
-      (players[0].weaponStats.SHOTGUN_GRADE1.hits * 100) /
-        players[0].weaponStats.SHOTGUN_GRADE1.shots,
-      '#b87333'
-    ],
-    [
-      'NG',
-      (players[0].weaponStats.NAILGUN.hits * 100) /
-        players[0].weaponStats.NAILGUN.shots,
-      '#b87333'
-    ],
-    [
-      'SNG',
-      (players[0].weaponStats.NAILGUN_GRADE1.hits * 100) /
-        players[0].weaponStats.NAILGUN_GRADE1.shots,
-      '#b87333'
-    ],
-    [
-      'RL',
-      (players[0].weaponStats.ROCKET_LAUNCHER.hits * 100) /
-        players[0].weaponStats.ROCKET_LAUNCHER.shots,
-      '#b87333'
-    ],
-    [
-      'LG',
-      (players[0].weaponStats.LIGHTNING_GUN.hits * 100) /
-        players[0].weaponStats.LIGHTNING_GUN.shots,
-      '#b87333'
-    ],
-    [
-      'RG',
-      (players[0].weaponStats.RAILGUN.hits * 100) /
-        players[0].weaponStats.RAILGUN.shots,
-      '#b87333'
-    ],
-    [
-      'TB',
-      (players[0].weaponStats.LAGBOLT.hits * 100) /
-        players[0].weaponStats.LAGBOLT.shots,
-      '#b87333'
-    ]
-  ];
-
-  let pieData = [
-    ['Weapon', 'Kills'],
-    ['MG', players[0].weaponStats.MACHINEGUN.kills],
-    ['HMG', players[0].weaponStats.MACHINEGUN_GRADE1.kills],
-    ['SG', players[0].weaponStats.SHOTGUN.kills],
-    ['SSG', players[0].weaponStats.SHOTGUN_GRADE1.kills],
-    ['NG', players[0].weaponStats.NAILGUN.kills],
-    ['SNG', players[0].weaponStats.NAILGUN_GRADE1.kills],
-    ['RL', players[0].weaponStats.ROCKET_LAUNCHER.kills],
-    ['LG', players[0].weaponStats.LIGHTNING_GUN.kills],
-    ['RG', players[0].weaponStats.RAILGUN.kills],
-    ['TB', players[0].weaponStats.LAGBOLT.kills]
-  ];
-
-  let pie2Data = [
-    ['Weapon', 'Damage'],
-    ['MG', players[0].weaponStats.MACHINEGUN.damage],
-    ['HMG', players[0].weaponStats.MACHINEGUN_GRADE1.damage],
-    ['SG', players[0].weaponStats.SHOTGUN.damage],
-    ['SSG', players[0].weaponStats.SHOTGUN_GRADE1.damage],
-    ['NG', players[0].weaponStats.NAILGUN.damage],
-    ['SNG', players[0].weaponStats.NAILGUN_GRADE1.damage],
-    ['RL', players[0].weaponStats.ROCKET_LAUNCHER.damage],
-    ['LG', players[0].weaponStats.LIGHTNING_GUN.damage],
-    ['RG', players[0].weaponStats.RAILGUN.damage],
-    ['TB', players[0].weaponStats.LAGBOLT.damage]
-  ];
-
-  if (props.participants.loading) {
-    return <Spinner />;
-  } else {
-    return (
-      <div className="container border-left border-right border-bottom">
-        <div className="row">
-          <div className="col-md-3 p-4">
-            <ul className="list-group">
-              {props.participants.data.map((player, index) => (
-                <li key={index} className="list-group-item">
-                  {player.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="col">
-            <Chart chartType="Gauge" data={gaugeData} options={options} />
-            <Chart
-              chartType="PieChart"
-              data={pieData}
-              options={{ legend: { position: 'none' } }}
-              graph_id="PieChart"
-              legend_toggle
-            />
-            <Chart
-              chartType="PieChart"
-              data={pie2Data}
-              options={{ legend: { position: 'none' } }}
-              graph_id="PieChart"
-              legend_toggle
-            />
-            <Chart
-              chartType="ColumnChart"
-              width="100%"
-              height="400px"
-              data={columnData}
-              options={{ legend: { position: 'none' } }}
-            />
+    if (this.props.participants.loading) {
+      return <Spinner />;
+    } else {
+      return (
+        <div className="container border-left border-right border-bottom">
+          <div className="row">
+            <div className="col-md-3 p-4">
+              <ul className="list-group">
+                {this.props.participants.data.map((player, index) => (
+                  <li
+                    key={index}
+                    className={classnames('btn list-group-item', {
+                      active: player.name === this.state.selectedPlayer.name
+                    })}
+                    onClick={() => this.playerOnClick(player.name)}
+                  >
+                    {player.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="col">
+              <div className="row justify-content-center">
+                <RatingGauge player={this.state.selectedPlayer} />
+              </div>
+              <div className="row justify-content-center">
+                <KillPie
+                  weaponStats={this.state.selectedPlayer.weaponStats}
+                  colors={colors}
+                />
+                <DamagePie
+                  weaponStats={this.state.selectedPlayer.weaponStats}
+                  colors={colors}
+                />
+              </div>
+              <div className="row justify-content-center">
+                <AccuracyChart
+                  weaponStats={this.state.selectedPlayer.weaponStats}
+                  colors={colors}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
+}
+
+Participants.propTypes = {
+  participants: PropTypes.object.isRequired
 };
+
+const mapStateToProps = state => ({
+  participants: state.participants
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(Participants);
