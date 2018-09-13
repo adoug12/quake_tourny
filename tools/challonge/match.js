@@ -30,7 +30,20 @@ const get = ({ id, matchId }) => {
   const url = `${endpoint}${id}/matches/${matchId}.json`;
   return axios
     .get(url)
-    .then(res => res.data)
+    .then(res => ({
+      id: res.data.match.id,
+      tournament_id: res.data.match.tournament_id,
+      state: res.data.match.state,
+      player1_id: res.data.match.player1_id,
+      player2_id: res.data.match.player2_id,
+      player1_prereq_match_id: res.data.match.player1_prereq_match_id,
+      player2_prereq_match_id: res.data.match.player2_prereq_match_id,
+      winner_id: res.data.match.winner_id,
+      loser_id: res.data.match.loser_id,
+      identifier: res.data.match.identifier,
+      round: res.data.match.round,
+      scores_csv: res.data.match.scores_csv
+    }))
     .catch(err => err.response.data);
 };
 

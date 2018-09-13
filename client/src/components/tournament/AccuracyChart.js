@@ -66,7 +66,6 @@ export default props => {
     <Chart
       chartType="ColumnChart"
       width="100%"
-      height="400px"
       data={columnData}
       options={{
         legend: { position: 'none' },

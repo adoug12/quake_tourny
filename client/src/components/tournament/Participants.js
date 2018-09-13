@@ -64,9 +64,34 @@ class Participants extends Component {
                 ))}
               </ul>
             </div>
-            <div className="col">
+            <div className="col p-4">
+              <div className="row">
+                <div className="col text-right">
+                  <h3>{this.state.selectedPlayer.name}</h3>
+                  <p>
+                    Level: {this.state.selectedPlayer.level}
+                    <br />
+                    Wins: {this.state.selectedPlayer.duelStats.won}
+                    <br />
+                    Losses: {this.state.selectedPlayer.duelStats.lost}
+                  </p>
+                </div>
+                <div className="col">
+                  <RatingGauge player={this.state.selectedPlayer} />
+                </div>
+              </div>
               <div className="row justify-content-center">
-                <RatingGauge player={this.state.selectedPlayer} />
+                {this.state.selectedPlayer.favoriteChampions.map(
+                  (champion, index) => (
+                    <img
+                      key={index}
+                      className="img-thumbnail"
+                      src={`/images/${champion.name}.png`}
+                      alt={champion.name}
+                      style={{ width: '80px', height: '80px' }}
+                    />
+                  )
+                )}
               </div>
               <div className="row justify-content-center">
                 <KillPie
@@ -78,7 +103,7 @@ class Participants extends Component {
                   colors={colors}
                 />
               </div>
-              <div className="row justify-content-center">
+              <div className="row">
                 <AccuracyChart
                   weaponStats={this.state.selectedPlayer.weaponStats}
                   colors={colors}

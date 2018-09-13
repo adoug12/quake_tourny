@@ -10,22 +10,13 @@ const player = alias => {
     .then(res => ({
       duelRating: res.data.playerRatings.duel.rating,
       level: res.data.playerLevelState.level,
-      gamesCount: res.data.playerRatings.duel.gamesCount,
-      wins: getWins(res.data.playerProfileStats.champions),
+      duelStats: getDuelStatistics(res.data.playerProfileStats.champions),
       favoriteChampions: getFavoriteChampions(
         res.data.playerProfileStats.champions
       ),
       weaponStats: getWeaponStats(res.data.playerProfileStats.champions)
     }))
     .catch(err => err);
-};
-
-const getWins = champStats => {
-  let total = 0;
-  for (champion in champStats) {
-    total += champStats[champion].gameModes.DUEL.won;
-  }
-  return total;
 };
 
 const getFavoriteChampions = champStats => {
@@ -66,6 +57,19 @@ const getWeaponStats = champStats => {
     }
   }
   return weaponStats;
+};
+
+const getDuelStatistics = champStats => {
+  let duelStats = {
+    won: null,
+    lost: null
+  };
+  for (champion in champStats) {
+    const duels = champStats[champion].gameModes.DUEL;
+    duelStats.won += duels.won;
+    duelStats.lost += duels.lost;
+  }
+  return duelStats;
 };
 
 module.exports = player;
