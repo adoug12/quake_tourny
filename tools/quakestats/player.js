@@ -24,7 +24,7 @@ const getFavoriteChampions = champStats => {
   for (champion in champStats) {
     favorites.push({
       name: champion,
-      timePlayed: champStats[champion].gameModes.DUEL.timePlayed
+      timePlayed: champStats[champion].gameModes.GameModeDuel.timePlayed
     });
   }
   return favorites.sort((a, b) => b.timePlayed - a.timePlayed).splice(0, 3);
@@ -65,7 +65,7 @@ const getDuelStatistics = champStats => {
     lost: null
   };
   for (champion in champStats) {
-    const duels = champStats[champion].gameModes.DUEL;
+    const duels = champStats[champion].gameModes.GameModeDuel;
     duelStats.won += duels.won;
     duelStats.lost += duels.lost;
   }

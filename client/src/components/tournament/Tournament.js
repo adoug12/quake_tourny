@@ -72,6 +72,7 @@ class Tournament extends Component {
 Tournament.propTypes = {
   getTournament: PropTypes.func.isRequired,
   tournament: PropTypes.object.isRequired,
+  participants: PropTypes.object.isRequired,
   getParticipants: PropTypes.func.isRequired
 };
 

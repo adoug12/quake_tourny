@@ -8,6 +8,7 @@ import axios from 'axios';
 import Spinner from '../Spinner';
 import RatingGauge from './RatingGauge';
 import WinLossChart from './WinLossChart';
+import AccuracyCompare from './AccuracyCompare';
 
 Modal.setAppElement('#root');
 
@@ -56,7 +57,7 @@ class Brackets extends Component {
           <div className="row">
             <div
               className="bracket-container"
-              style={{ height: rounds[0] ? rounds[0].length * 80 : '100%' }}
+              style={{ height: rounds[0] ? rounds[0].length * 100 : '100%' }}
             >
               {rounds.map((round, index) => (
                 <div className="bracket-level" key={index}>
@@ -100,10 +101,23 @@ class Brackets extends Component {
               contentLabel="onRequestClose Example"
               onRequestClose={this.handleCloseModal}
               shouldCloseOnOverlayClick={true}
+              style={{
+                content: {
+                  bottom: 'auto',
+                  left: '50%',
+                  right: 'auto',
+                  top: '50%',
+                  marginRight: '-50%',
+                  transform: 'translate(-50%, -50%)'
+                }
+              }}
             >
               <div className="row">
                 <div className="col text-right">
-                  <h3 className="text-primary">{this.state.player1.name}</h3>
+                  <h3 className="text-primary">
+                    {this.state.match.scores_csv.split('-')[0]}{' '}
+                    {this.state.player1.name}
+                  </h3>
                   {this.state.player1.favoriteChampions.map(
                     (champion, index) => (
                       <img
@@ -116,14 +130,17 @@ class Brackets extends Component {
                     )
                   )}
                 </div>
-                <div className="col-sm-1">
+                <div className="col-sm-2">
                   <RatingGauge player={this.state.player1} />
                 </div>
-                <div className="col-sm-1">
+                <div className="col-sm-2">
                   <RatingGauge player={this.state.player2} />
                 </div>
                 <div className="col">
-                  <h3 className="text-danger">{this.state.player2.name}</h3>
+                  <h3 className="text-danger">
+                    {this.state.player2.name}{' '}
+                    {this.state.match.scores_csv.split('-')[1]}
+                  </h3>
                   {this.state.player2.favoriteChampions.map(
                     (champion, index) => (
                       <img
@@ -137,8 +154,15 @@ class Brackets extends Component {
                   )}
                 </div>
               </div>
-              <div className="row">
-                <WinLossChart player1={this.state.player1} player2={this.state.player2} />
+              <div className="row justify-content-center">
+                <WinLossChart
+                  player1={this.state.player1}
+                  player2={this.state.player2}
+                />
+                <AccuracyCompare
+                  player1={this.state.player1}
+                  player2={this.state.player2}
+                />
               </div>
             </Modal>
           )}

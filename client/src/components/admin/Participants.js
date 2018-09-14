@@ -60,15 +60,21 @@ class Participants extends Component {
             {participants.map(player => (
               <tr key={player.id}>
                 <td>
-                  <i
-                    className="btn fas fa-angle-up"
-                    onClick={() => this.seedUpOnClick(player.id, player.seed)}
-                  />{' '}
+                  {this.props.tournament.data.state !== 'underway' && (
+                    <i
+                      className="btn fas fa-angle-up"
+                      onClick={() => this.seedUpOnClick(player.id, player.seed)}
+                    />
+                  )}{' '}
                   {player.seed}{' '}
-                  <i
-                    className="btn fas fa-angle-down"
-                    onClick={() => this.seedDownOnClick(player.id, player.seed)}
-                  />
+                  {this.props.tournament.data.state !== 'underway' && (
+                    <i
+                      className="btn fas fa-angle-down"
+                      onClick={() =>
+                        this.seedDownOnClick(player.id, player.seed)
+                      }
+                    />
+                  )}
                 </td>
                 <td>{player.name}</td>
                 <td>{player.duelRating}</td>

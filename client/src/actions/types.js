@@ -10,6 +10,7 @@ export const CHECKIN = 'CHECKIN';
 export const CHECKOUT = 'CHECKOUT';
 export const SEED_UP = 'SEED_UP';
 export const GET_PARTICIPANTS = 'GET_PARTICIPANTS';
+export const GET_PARTICIPANT = 'GET_PARTICIPANT';
 export const PARTICIPANTS_LOADING = 'PARTICIPANTS_LOADING';
 export const GET_ROUNDS = 'GET_ROUNDS';
 export const ROUNDS_LOADING = 'ROUNDS_LOADING';

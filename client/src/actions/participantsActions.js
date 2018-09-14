@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { GET_PARTICIPANTS, PARTICIPANTS_LOADING } from './types';
+import {
+  GET_PARTICIPANTS,
+  GET_PARTICIPANT,
+  PARTICIPANTS_LOADING
+} from './types';
 
 export const getParticipants = id => dispatch => {
   dispatch(setParticipantsLoading());
@@ -23,6 +27,16 @@ export const setParticipantsLoading = () => {
   return {
     type: PARTICIPANTS_LOADING
   };
+};
+
+export const getParticipant = (id, playerId) => dispatch => {
+  dispatch(setParticipantsLoading());
+  axios.get(`/api/tournament/${id}/participants/${playerId}`).then(res =>
+    dispatch({
+      type: GET_PARTICIPANT,
+      payload: res.data
+    })
+  );
 };
 
 export const checkin = (id, playerId) => dispatch => {

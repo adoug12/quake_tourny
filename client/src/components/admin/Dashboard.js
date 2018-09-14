@@ -78,7 +78,7 @@ class Dashboard extends Component {
                 type="button"
                 className="btn btn-primary mr-1"
                 onClick={this.processCheckinsOnClick}
-                disabled={tournament.state === 'checking_in' ? true : false}
+                disabled={tournament.state === 'checking_in' ? false : true}
               >
                 Process Check-Ins
               </button>
