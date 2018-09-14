@@ -87,7 +87,7 @@ SignupForm.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  tournament: state.tournament.info
+  tournament: state.tournament
 });
 
 export default connect(

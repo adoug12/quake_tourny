@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import Spinner from '../Spinner';
-import RatingGauge from './RatingGauge';
-import KillPie from './KillPie';
-import DamagePie from './DamagePie';
-import AccuracyChart from './AccuracyChart';
+import RatingGauge from '../charts/RatingGauge';
+import KillPie from '../charts/KillPie';
+import DamagePie from '../charts/DamagePie';
+import AccuracyChart from '../charts/AccuracyChart';
 
 class Participants extends Component {
   constructor() {

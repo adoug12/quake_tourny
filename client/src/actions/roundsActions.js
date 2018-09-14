@@ -24,3 +24,10 @@ export const setRoundsLoading = () => {
     type: ROUNDS_LOADING
   };
 };
+
+export const submitScores = (id, matchId, scores) => dispatch => {
+  axios
+    .put(`/api/tournament/${id}/matches/${matchId}`, scores)
+    .then(res => dispatch(getRounds(id)))
+    .catch(err => console.log(err));
+};

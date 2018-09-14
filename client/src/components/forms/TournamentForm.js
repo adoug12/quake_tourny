@@ -43,7 +43,10 @@ class TournamentForm extends Component {
       description: this.state.description,
       signup_cap: this.state.signup_cap,
       check_in_duration: this.state.check_in_duration,
-      start_at: this.state.start_at
+      start_at: this.state.start_at,
+      open_signup: false,
+      hide_forum: true,
+      private: true
     };
 
     this.props.createTournament(tournamentData, this.props.history);

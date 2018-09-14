@@ -39,7 +39,7 @@ const get = ({ id, playerId }) => {
       active: res.data.participant.active,
       final_rank: res.data.participant.final_rank,
       checked_in: res.data.participant.checked_in,
-      matches: res.data.participant.matches
+      matches: res.data.participant.matches.map(match => match.match)
     }))
     .catch(err => err.response.data);
 };

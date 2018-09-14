@@ -6,7 +6,6 @@ import store from './store';
 import TournamentForm from './components/forms/TournamentForm';
 import Dashboard from './components/admin/Dashboard';
 import Tournament from './components/tournament/Tournament';
-import Player from './components/player/Player';
 
 import './App.css';
 
@@ -19,11 +18,6 @@ class App extends Component {
             <Route exact path="/" component={TournamentForm} />
             <Route exact path="/tournament/:id/admin" component={Dashboard} />
             <Route exact path="/tournament/:id" component={Tournament} />
-            <Route
-              exact
-              path="/tournament/:id/player/:playerId"
-              component={Player}
-            />
           </div>
         </Router>
       </Provider>

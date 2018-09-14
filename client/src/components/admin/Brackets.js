@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { getRounds } from '../../actions/roundsActions';
 import Modal from 'react-modal';
 import axios from 'axios';
+import { submitScores } from '../../actions/roundsActions';
 
 import Spinner from '../Spinner';
 import RatingGauge from '../charts/RatingGauge';
@@ -15,8 +16,17 @@ Modal.setAppElement('#root');
 class Brackets extends Component {
   constructor() {
     super();
-    this.state = { showModal: false, match: {}, player1: {}, player2: {} };
+    this.state = {
+      showModal: false,
+      match: {},
+      player1: {},
+      player2: {},
+      player1_score: 0,
+      player2_score: 0
+    };
     this.getPlayer = this.getPlayer.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.submitScoresOnClick = this.submitScoresOnClick.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
   }
@@ -25,8 +35,36 @@ class Brackets extends Component {
     this.props.getRounds(this.props.id);
   }
 
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   getPlayer(id) {
     return this.props.participants.data.find(player => player.id === id);
+  }
+
+  submitScoresOnClick() {
+    const winner_id =
+      this.state.player1_score > this.state.player2_score
+        ? this.state.player1.id
+        : this.state.player2.id;
+    const matchScore = {
+      match: {
+        winner_id,
+        scores_csv: this.state.player1_score + '-' + this.state.player2_score
+      }
+    };
+    this.props.submitScores(this.props.id, this.state.match.id, matchScore);
+    this.setState({
+      showModal: false,
+      match: {},
+      player1: {},
+      player2: {},
+      player1_score: 0,
+      player2_score: 0
+    });
   }
 
   handleOpenModal(matchId) {
@@ -44,7 +82,7 @@ class Brackets extends Component {
           });
         }
       })
-      .catch(err => console.log(err.response.data));
+      .catch(err => console.log(err));
   }
 
   handleCloseModal() {
@@ -57,7 +95,7 @@ class Brackets extends Component {
       const rounds = this.props.rounds.data;
 
       return (
-        <div className="container border-left border-right border-bottom">
+        <div className="container">
           <div className="row">
             <div
               className="bracket-container"
@@ -168,6 +206,41 @@ class Brackets extends Component {
                   player2={this.state.player2}
                 />
               </div>
+              {this.state.match.state !== 'complete' && (
+                <div>
+                  <div className="form-row justify-content-center">
+                    <div className="col-2">
+                      <input
+                        type="number"
+                        className="form-control form-control-lg"
+                        name="player1_score"
+                        value={this.state.player1_score}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="col-2">
+                      <input
+                        type="number"
+                        className="form-control form-control-lg"
+                        name="player2_score"
+                        value={this.state.player2_score}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row justify-content-center">
+                    <div className="col-4">
+                      <button
+                        type="button"
+                        className="btn btn-block btn-primary mt-2"
+                        onClick={this.submitScoresOnClick}
+                      >
+                        Submit Score
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </Modal>
           )}
         </div>
@@ -179,7 +252,8 @@ class Brackets extends Component {
 Brackets.propTypes = {
   participants: PropTypes.object.isRequired,
   rounds: PropTypes.object.isRequired,
-  getRounds: PropTypes.func.isRequired
+  getRounds: PropTypes.func.isRequired,
+  submitScores: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -189,5 +263,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRounds }
+  { getRounds, submitScores }
 )(Brackets);

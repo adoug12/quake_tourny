@@ -1,8 +1,4 @@
-import {
-  GET_PARTICIPANTS,
-  GET_PARTICIPANT,
-  PARTICIPANTS_LOADING
-} from '../actions/types';
+import { GET_PARTICIPANTS, PARTICIPANTS_LOADING } from '../actions/types';
 
 const initialState = {
   data: [],
@@ -17,12 +13,6 @@ export default (state = initialState, action) => {
         loading: true
       };
     case GET_PARTICIPANTS:
-      return {
-        data: action.payload,
-        loading: false
-      };
-
-    case GET_PARTICIPANT:
       return {
         data: action.payload,
         loading: false
