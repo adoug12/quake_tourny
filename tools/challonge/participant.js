@@ -68,38 +68,11 @@ const checkOut = ({ id, playerId }) => {
     .catch(err => err.response.data);
 };
 
-const remove = ({ id, playerId }) => {
-  const url = `${endpoint}${id}/participants/${playerId}.json`;
-  return axios
-    .delete(url)
-    .then(res => res.data)
-    .catch(err => err.response.data);
-};
-
-const clear = id => {
-  const url = `${endpoint}${id}/participants/clear.json`;
-  return axios
-    .delete(url)
-    .then(res => res.data)
-    .catch(err => err.response.data);
-};
-
-const randomize = id => {
-  const url = `${endpoint}${id}/participants/randomize.json`;
-  return axios
-    .post(url)
-    .then(res => res.data)
-    .catch(err => err.response.data);
-};
-
 module.exports = {
   signUp,
   getAll,
   get,
   update,
   checkIn,
-  checkOut,
-  remove,
-  clear,
-  randomize
+  checkOut
 };

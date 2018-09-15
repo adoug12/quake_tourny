@@ -46,13 +46,6 @@ router.get('/:id/participants/:playerId', (req, res) => {
     .catch(err => res.json(err));
 });
 
-router.get('/:id/matches', (req, res) => {
-  match
-    .getAll(req.params.id)
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
-
 router.get('/:id/rounds', (req, res) => {
   match
     .getAll(req.params.id)
@@ -124,27 +117,6 @@ router.post('/:id/participants/:playerId/check_in', (req, res) => {
 router.post('/:id/participants/:playerId/check_out', (req, res) => {
   participant
     .checkOut(req.params)
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
-
-router.delete('/:id/participants/:playerId/remove', (req, res) => {
-  participant
-    .remove(req.params)
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
-
-router.delete('/:id/participants', (req, res) => {
-  participant
-    .clear(req.params.id)
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
-
-router.post('/:id/participants/randomize', (req, res) => {
-  participant
-    .randomize(req.params.id)
     .then(data => res.json(data))
     .catch(err => res.json(err));
 });
