@@ -54,21 +54,29 @@ router.get('/:id/matches', (req, res) => {
 });
 
 router.get('/:id/rounds', (req, res) => {
-  match.getAll(req.params.id).then(matches => {
-    const roundCount = Math.max.apply(Math, matches.map(match => match.round));
-    let rounds = [];
-    for (let i = 0; i < roundCount; i++) {
-      rounds[i] = matches.filter(match => match.round === i + 1);
-    }
-    res.json(rounds);
-  });
+  match
+    .getAll(req.params.id)
+    .then(matches => {
+      const roundCount = Math.max.apply(
+        Math,
+        matches.map(match => match.round)
+      );
+      let rounds = [];
+      for (let i = 0; i < roundCount; i++) {
+        rounds[i] = matches.filter(match => match.round === i + 1);
+      }
+      res.json(rounds);
+    })
+    .catch(err => res.json(err));
 });
 
 router.post('/create', (req, res) => {
   tournament
     .create(req.body)
     .then(data => res.json(data))
-    .catch(err => res.json(err));
+    .catch(err => {
+      res.status(400).json(err);
+    });
 });
 
 router.post('/:id/process_check_ins', (req, res) => {

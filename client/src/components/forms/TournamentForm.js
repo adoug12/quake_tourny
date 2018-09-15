@@ -54,108 +54,91 @@ class TournamentForm extends Component {
 
   render() {
     const { errors } = this.state;
-
     return (
-      <div className="container form-container">
-        <div className="row">
-          <div className="col-md-8 m-auto">
-            <p className="lead text-center">Create your Tournament</p>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.name
-                  })}
-                  placeholder="Name"
-                  name="name"
-                  value={this.state.name}
-                  onChange={this.onChange}
-                />
-                {errors.name && (
-                  <div className="invalid-feedback">{errors.name}</div>
-                )}
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.url
-                  })}
-                  placeholder="URL"
-                  name="url"
-                  value={this.state.url}
-                  onChange={this.onChange}
-                />
-                {errors.url && (
-                  <div className="invalid-feedback">{errors.url}</div>
-                )}
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.description
-                  })}
-                  placeholder="Description"
-                  name="description"
-                  value={this.state.description}
-                  onChange={this.onChange}
-                />
-                {errors.description && (
-                  <div className="invalid-feedback">{errors.description}</div>
-                )}
-              </div>
-              <div className="form-group">
-                <input
-                  type="number"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.signup_cap
-                  })}
-                  placeholder="Signup Cap"
-                  name="signup_cap"
-                  value={this.state.signup_cap}
-                  onChange={this.onChange}
-                />
-                {errors.signup_cap && (
-                  <div className="invalid-feedback">{errors.signup_cap}</div>
-                )}
-              </div>
-              <div className="form-group">
-                <input
-                  type="number"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.check_in_duration
-                  })}
-                  placeholder="Check In Duration"
-                  name="check_in_duration"
-                  value={this.state.check_in_duration}
-                  onChange={this.onChange}
-                />
-                {errors.check_in_duration && (
-                  <div className="invalid-feedback">
-                    {errors.check_in_duration}
-                  </div>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="startAt">Start At</label>
-                <input
-                  type="datetime-local"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.start_at
-                  })}
-                  name="start_at"
-                  value={this.state.start_at}
-                  onChange={this.onChange}
-                />
-                {errors.start_at && (
-                  <div className="invalid-feedback">{errors.start_at}</div>
-                )}
-              </div>
-              <input type="submit" className="btn btn-info btn-block mt-4" />
-            </form>
-          </div>
+      <div className="container form-container mt-2">
+        <h1 className="text-center">Create Your Tournament</h1>
+        <div className="col-md-8 m-auto mt-2">
+          <form onSubmit={this.onSubmit}>
+            <div className="form-group">
+              {errors.errors &&
+                errors.errors.map((error, index) => (
+                  <p key={index} className="text-danger">
+                    {error}
+                  </p>
+                ))}
+              <input
+                type="text"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.name
+                })}
+                placeholder="Name"
+                name="name"
+                value={this.state.name}
+                onChange={this.onChange}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.url
+                })}
+                placeholder="URL"
+                name="url"
+                value={this.state.url}
+                onChange={this.onChange}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.description
+                })}
+                placeholder="Description"
+                name="description"
+                value={this.state.description}
+                onChange={this.onChange}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="number"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.signup_cap
+                })}
+                placeholder="Signup Cap"
+                name="signup_cap"
+                value={this.state.signup_cap}
+                onChange={this.onChange}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="number"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.check_in_duration
+                })}
+                placeholder="Check In Duration (minutes)"
+                name="check_in_duration"
+                value={this.state.check_in_duration}
+                onChange={this.onChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="startAt">Start At</label>
+              <input
+                type="datetime-local"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.start_at
+                })}
+                name="start_at"
+                value={this.state.start_at}
+                onChange={this.onChange}
+              />
+            </div>
+            <input type="submit" className="btn btn-primary btn-block mt-4" />
+          </form>
         </div>
       </div>
     );

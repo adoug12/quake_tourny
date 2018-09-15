@@ -45,6 +45,8 @@ class Participants extends Component {
 
     if (this.props.participants.loading) {
       return <Spinner />;
+    } else if (this.props.participants.data.length === 0) {
+      return <div>No signups yet.</div>;
     } else {
       return (
         <div className="container border-left border-right border-bottom">

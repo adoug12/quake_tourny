@@ -53,6 +53,8 @@ class Brackets extends Component {
   render() {
     if (this.props.rounds.loading) {
       return <Spinner />;
+    } else if (this.props.rounds.data.length === 0) {
+      return <div>Brackets will be available when tournament starts.</div>;
     } else {
       const rounds = this.props.rounds.data;
 

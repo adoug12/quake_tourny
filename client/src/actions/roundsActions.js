@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ROUNDS, ROUNDS_LOADING, GET_ERRORS } from './types';
+import { GET_ROUNDS, ROUNDS_LOADING } from './types';
 
 export const getRounds = id => dispatch => {
   dispatch(setRoundsLoading());
