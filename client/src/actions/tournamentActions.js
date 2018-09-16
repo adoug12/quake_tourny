@@ -1,25 +1,16 @@
 import axios from 'axios';
 import { GET_TOURNAMENT, TOURNAMENT_LOADING, GET_ERRORS } from './types';
 
-export const createTournament = (tournament, history) => dispatch => {
+export const createTournament = (tournamentData, history) => dispatch => {
   axios
-    .post('/api/tournament/create', { tournament })
-    .then(res => {
-      if (res.data.errors) {
-        dispatch({
-          type: GET_ERRORS,
-          payload: res.data
-        });
-      } else {
-        history.push(`/tournament/${res.data.tournament.id}/admin`);
-      }
-    })
-    .catch(err => {
+    .post('/api/tournament/create', tournamentData)
+    .then(res => history.push(`/tournament/${res.data.tournament.id}/admin`))
+    .catch(err =>
       dispatch({
         type: GET_ERRORS,
-        payload: err
-      });
-    });
+        payload: err.response.data
+      })
+    );
 };
 
 export const getTournament = id => dispatch => {

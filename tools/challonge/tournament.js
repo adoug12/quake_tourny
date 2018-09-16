@@ -1,15 +1,8 @@
 const axios = require('axios');
 const apiEndpoint = require('./config').apiEndpoint;
+const moment = require('moment-timezone');
 
 const endpoint = `${apiEndpoint}/tournaments`;
-
-const getAll = () => {
-  const url = `${endpoint}.json`;
-  return axios
-    .get(url)
-    .then(res => res.data)
-    .catch(err => err.response.data);
-};
 
 const get = id => {
   const url = `${endpoint}/${id}.json`;
@@ -31,8 +24,17 @@ const get = id => {
 
 const create = tournamentData => {
   const url = `${endpoint}.json`;
+  tournamentData.start_at = moment(tournamentData.start_at)
+    .tz(tournamentData.time_zone)
+    .format();
+  const postData = {
+    ...tournamentData,
+    open_signup: false,
+    hide_forum: true,
+    private: true
+  };
   return axios
-    .post(url, tournamentData)
+    .post(url, postData)
     .then(res => res.data)
     .catch(err => err.response.data);
 };
@@ -61,4 +63,4 @@ const finalize = id => {
     .catch(err => err.response.data);
 };
 
-module.exports = { getAll, get, create, processCheckIns, start, finalize };
+module.exports = { get, create, processCheckIns, start, finalize };

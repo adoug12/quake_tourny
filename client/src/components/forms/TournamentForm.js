@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
+import moment from 'moment-timezone';
 import { createTournament } from '../../actions/tournamentActions';
 
 class TournamentForm extends Component {
@@ -15,6 +16,7 @@ class TournamentForm extends Component {
       signup_cap: '',
       check_in_duration: '',
       start_at: '',
+      time_zone: '',
       errors: {}
     };
     this.onChange = this.onChange.bind(this);
@@ -23,6 +25,7 @@ class TournamentForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
+      console.log(nextProps.errors);
       this.setState({ errors: nextProps.errors });
     }
   }
@@ -36,36 +39,18 @@ class TournamentForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
-    const tournamentData = {
-      name: this.state.name,
-      url: this.state.url,
-      description: this.state.description,
-      signup_cap: this.state.signup_cap,
-      check_in_duration: this.state.check_in_duration,
-      start_at: this.state.start_at,
-      open_signup: false,
-      hide_forum: true,
-      private: true
-    };
-
-    this.props.createTournament(tournamentData, this.props.history);
+    this.props.createTournament(this.state, this.props.history);
   }
 
   render() {
     const { errors } = this.state;
+    const timeZones = moment.tz.names();
     return (
       <div className="container form-container mt-2">
         <h1 className="text-center">Create Your Tournament</h1>
         <div className="col-md-8 m-auto mt-2">
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
-              {errors.errors &&
-                errors.errors.map((error, index) => (
-                  <p key={index} className="text-danger">
-                    {error}
-                  </p>
-                ))}
               <input
                 type="text"
                 className={classnames('form-control form-control-lg', {
@@ -76,6 +61,9 @@ class TournamentForm extends Component {
                 value={this.state.name}
                 onChange={this.onChange}
               />
+              {errors.name && (
+                <div className="invalid-feedback">{errors.name}</div>
+              )}
             </div>
             <div className="form-group">
               <input
@@ -88,13 +76,14 @@ class TournamentForm extends Component {
                 value={this.state.url}
                 onChange={this.onChange}
               />
+              {errors.url && (
+                <div className="invalid-feedback">{errors.url}</div>
+              )}
             </div>
             <div className="form-group">
               <input
                 type="text"
-                className={classnames('form-control form-control-lg', {
-                  'is-invalid': errors.description
-                })}
+                className="form-control form-control-lg"
                 placeholder="Description"
                 name="description"
                 value={this.state.description}
@@ -104,9 +93,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="number"
-                className={classnames('form-control form-control-lg', {
-                  'is-invalid': errors.signup_cap
-                })}
+                className="form-control form-control-lg"
                 placeholder="Signup Cap"
                 name="signup_cap"
                 value={this.state.signup_cap}
@@ -116,9 +103,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="number"
-                className={classnames('form-control form-control-lg', {
-                  'is-invalid': errors.check_in_duration
-                })}
+                className="form-control form-control-lg"
                 placeholder="Check In Duration (minutes)"
                 name="check_in_duration"
                 value={this.state.check_in_duration}
@@ -136,6 +121,31 @@ class TournamentForm extends Component {
                 value={this.state.start_at}
                 onChange={this.onChange}
               />
+              {errors.start_at && (
+                <div className="invalid-feedback">{errors.start_at}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <select
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.time_zone
+                })}
+                name="time_zone"
+                onChange={this.onChange}
+                value={this.state.time_zone}
+              >
+                <option value="" disabled>
+                  Select time zone
+                </option>
+                {timeZones.map((zone, index) => (
+                  <option value={zone} key={index}>
+                    {zone}
+                  </option>
+                ))}
+              </select>
+              {errors.time_zone && (
+                <div className="invalid-feedback">{errors.time_zone}</div>
+              )}
             </div>
             <input type="submit" className="btn btn-primary btn-block mt-4" />
           </form>

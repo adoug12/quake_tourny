@@ -21,8 +21,8 @@ class Brackets extends Component {
       match: {},
       player1: {},
       player2: {},
-      player1_score: 0,
-      player2_score: 0
+      player1_score: '',
+      player2_score: ''
     };
     this.getPlayer = this.getPlayer.bind(this);
     this.onChange = this.onChange.bind(this);

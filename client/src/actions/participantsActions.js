@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_PARTICIPANTS, PARTICIPANTS_LOADING } from './types';
+import { GET_PARTICIPANTS, PARTICIPANTS_LOADING, GET_ERRORS } from './types';
 
 export const getParticipants = id => dispatch => {
   dispatch(setParticipantsLoading());
@@ -50,5 +50,10 @@ export const signUp = (id, name) => dispatch => {
   axios
     .post(`/api/tournament/${id}/signup`, { name })
     .then(res => dispatch(getParticipants(id)))
-    .catch(err => dispatch(getParticipants(id)));
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 };

@@ -28,22 +28,6 @@ const getAll = id => {
     .catch(err => err.response.data);
 };
 
-const get = ({ id, playerId }) => {
-  const url = `${endpoint}${id}/participants/${playerId}.json?include_matches=1`;
-  return axios
-    .get(url)
-    .then(res => ({
-      id: res.data.participant.id,
-      name: res.data.participant.name,
-      seed: res.data.participant.seed,
-      active: res.data.participant.active,
-      final_rank: res.data.participant.final_rank,
-      checked_in: res.data.participant.checked_in,
-      matches: res.data.participant.matches.map(match => match.match)
-    }))
-    .catch(err => err.response.data);
-};
-
 const update = ({ id, playerId }, playerData) => {
   const url = `${endpoint}${id}/participants/${playerId}.json`;
   return axios
@@ -71,7 +55,6 @@ const checkOut = ({ id, playerId }) => {
 module.exports = {
   signUp,
   getAll,
-  get,
   update,
   checkIn,
   checkOut

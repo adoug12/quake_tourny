@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 import axios from 'axios';
 import { signUp } from '../../actions/participantsActions';
 
@@ -9,10 +10,17 @@ class SignupForm extends Component {
     super();
     this.state = {
       name: '',
-      predictions: []
+      predictions: [],
+      errors: {}
     };
     this.signUpOnChange = this.signUpOnChange.bind(this);
     this.signUpOnClick = this.signUpOnClick.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   signUpOnChange(e) {
@@ -38,19 +46,15 @@ class SignupForm extends Component {
   }
 
   signUpOnClick() {
-    this.searchPlayer(this.state.name).then(players => {
-      if (players.find(name => name === this.state.name)) {
-        this.props.signUp(this.props.tournament.data.id, this.state.name);
-        this.setState({
-          name: ''
-        });
-      } else {
-        console.log(`${this.state.name} not found`);
-      }
+    this.props.signUp(this.props.tournament.data.id, this.state.name);
+    this.setState({
+      name: '',
+      errors: {}
     });
   }
 
   render() {
+    const { errors } = this.state;
     return (
       <div className="input-group mb-3">
         <div className="input-group-prepend">
@@ -64,7 +68,9 @@ class SignupForm extends Component {
         </div>
         <input
           list="playerNames"
-          className="form-control"
+          className={classnames('form-control', {
+            'is-invalid': errors.name
+          })}
           placeholder="Player name..."
           name="name"
           autoComplete="off"
@@ -76,6 +82,7 @@ class SignupForm extends Component {
             <option key={index + item} value={item} />
           ))}
         </datalist>
+        {errors.name && <div className="invalid-feedback">{errors.name}</div>}
       </div>
     );
   }
@@ -83,11 +90,13 @@ class SignupForm extends Component {
 
 SignupForm.propTypes = {
   signUp: PropTypes.func.isRequired,
-  tournament: PropTypes.object.isRequired
+  tournament: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  tournament: state.tournament
+  tournament: state.tournament,
+  errors: state.errors
 });
 
 export default connect(

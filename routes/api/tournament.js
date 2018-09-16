@@ -4,20 +4,26 @@ const tournament = require('../../tools/challonge').tournament;
 const participant = require('../../tools/challonge').participant;
 const match = require('../../tools/challonge').match;
 const quakestats = require('../../tools/quakestats');
-
-router.get('/', (req, res) => {
-  tournament
-    .getAll()
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
+const validateTournament = require('../../validation/tournament');
 
 router.get('/:id', (req, res) => {
-  // get tournament data
   tournament
     .get(req.params.id)
     .then(info => res.json(info))
     .catch(err => res.json(err));
+});
+
+router.post('/create', (req, res) => {
+  const { errors, isValid } = validateTournament(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  tournament
+    .create(req.body)
+    .then(data => res.json(data))
+    .catch(err => res.status(404).json(err));
 });
 
 router.get('/:id/participants', (req, res) => {
@@ -31,17 +37,6 @@ router.get('/:id/participants', (req, res) => {
             .then(stats => ({ ...player, ...stats }))
         )
       ).then(players => res.json(players));
-    })
-    .catch(err => res.json(err));
-});
-
-router.get('/:id/participants/:playerId', (req, res) => {
-  participant
-    .get(req.params)
-    .then(player => {
-      quakestats.player(player.name).then(stats => {
-        res.json({ ...player, ...stats });
-      });
     })
     .catch(err => res.json(err));
 });
@@ -63,13 +58,23 @@ router.get('/:id/rounds', (req, res) => {
     .catch(err => res.json(err));
 });
 
-router.post('/create', (req, res) => {
-  tournament
-    .create(req.body)
-    .then(data => res.json(data))
-    .catch(err => {
-      res.status(400).json(err);
-    });
+router.post('/:id/signup', (req, res) => {
+  quakestats
+    .search(req.body.name)
+    .then(data => {
+      if (
+        data.length > 0 &&
+        data.find(player => player.entityName === req.body.name)
+      ) {
+        participant
+          .signUp(req.params.id, req.body)
+          .then(data => res.json(data))
+          .catch(err => res.json(err));
+      } else {
+        res.status(400).json({ name: 'Player not found.' });
+      }
+    })
+    .catch(err => res.json(err));
 });
 
 router.post('/:id/process_check_ins', (req, res) => {
@@ -89,13 +94,6 @@ router.post('/:id/start', (req, res) => {
 router.post('/:id/finalize', (req, res) => {
   tournament
     .finalize(req.params.id)
-    .then(data => res.json(data))
-    .catch(err => res.json(err));
-});
-
-router.post('/:id/signup', (req, res) => {
-  participant
-    .signUp(req.params.id, req.body)
     .then(data => res.json(data))
     .catch(err => res.json(err));
 });
