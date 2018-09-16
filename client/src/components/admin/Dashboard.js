@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -114,6 +115,11 @@ class Dashboard extends Component {
               Tournament Starts: {startTime.format('h:mm a')}
               <br />
               Checkins Open: {checkinTime.format('h:mm a')}
+              <br />
+              Public URL:{' '}
+              <Link to={`/tournament/${tournament.id}`} target="_blank">
+                {window.location.href.slice(0, -6)}
+              </Link>
             </p>
             {dashboardContent}
           </div>

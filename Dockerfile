@@ -6,4 +6,6 @@ COPY package.json .
 RUN npm install
 COPY . .
 EXPOSE 5000
-CMD ["npm", "run", "server"]
+RUN npm run build
+ENV NODE_ENV production
+CMD ["npm", "start"]
