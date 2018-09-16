@@ -124,8 +124,7 @@ class Dashboard extends Component {
             {dashboardContent}
           </div>
         </div>
-        <div className="row" />
-        {controlButtons}
+        <div className="row">{controlButtons}</div>
       </div>
     );
   }
