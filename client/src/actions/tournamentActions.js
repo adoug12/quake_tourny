@@ -23,12 +23,16 @@ export const getTournament = id => dispatch => {
         payload: res.data
       });
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
       dispatch({
         type: GET_TOURNAMENT,
         payload: {}
-      })
-    );
+      });
+    });
 };
 
 export const setTournamentLoading = () => {

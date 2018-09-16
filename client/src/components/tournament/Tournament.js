@@ -13,7 +13,8 @@ class Tournament extends Component {
   constructor() {
     super();
     this.state = {
-      tab: 'brackets'
+      tab: 'brackets',
+      errors: {}
     };
   }
 
@@ -22,20 +23,35 @@ class Tournament extends Component {
     this.props.getParticipants(this.props.match.params.id);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   render() {
+    const { errors } = this.state;
     let mainContent;
+
     if (this.props.participants.loading) mainContent = <Spinner />;
     else {
-      mainContent =
-        this.state.tab === 'brackets' ? (
-          <Brackets id={this.props.match.params.id} />
-        ) : (
-          <Participants />
-        );
+      if (errors.participants) {
+        mainContent = <div>{errors.participants}</div>;
+      } else {
+        mainContent =
+          this.state.tab === 'brackets' ? (
+            <Brackets id={this.props.match.params.id} />
+          ) : (
+            <Participants />
+          );
+      }
     }
     if (this.props.tournament.loading) {
       return <Spinner />;
     } else {
+      if (errors.tournament) {
+        return <div>{errors.tournament}</div>;
+      }
       return (
         <div className="container tournament-container">
           <h4>{this.props.tournament.data.name}</h4>
@@ -72,13 +88,15 @@ class Tournament extends Component {
 Tournament.propTypes = {
   getTournament: PropTypes.func.isRequired,
   tournament: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   participants: PropTypes.object.isRequired,
   getParticipants: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   tournament: state.tournament,
-  participants: state.participants
+  participants: state.participants,
+  errors: state.errors
 });
 
 export default connect(

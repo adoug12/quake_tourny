@@ -11,12 +11,16 @@ export const getParticipants = id => dispatch => {
         payload: res.data
       })
     )
-    .catch(err =>
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
       dispatch({
         type: GET_PARTICIPANTS,
         payload: {}
-      })
-    );
+      });
+    });
 };
 
 export const setParticipantsLoading = () => {

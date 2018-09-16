@@ -9,7 +9,12 @@ const validateTournament = require('../../validation/tournament');
 router.get('/:id', (req, res) => {
   tournament
     .get(req.params.id)
-    .then(info => res.json(info))
+    .then(
+      info =>
+        info.errors
+          ? res.status(404).json({ tournament: info.errors })
+          : res.json(info)
+    )
     .catch(err => res.json(err));
 });
 
@@ -36,7 +41,13 @@ router.get('/:id/participants', (req, res) => {
             .player(player.name)
             .then(stats => ({ ...player, ...stats }))
         )
-      ).then(players => res.json(players));
+      )
+        .then(players => res.json(players))
+        .catch(err =>
+          res
+            .status(404)
+            .json({ participants: 'Failed to retrieve participants' })
+        );
     })
     .catch(err => res.json(err));
 });
