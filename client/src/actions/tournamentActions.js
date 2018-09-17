@@ -5,13 +5,12 @@ export const createTournament = (tournamentData, history) => dispatch => {
   axios
     .post('/api/tournament/create', tournamentData)
     .then(res => history.push(`/tournament/${res.data.tournament.id}/admin`))
-    .catch(err => {
-      console.log(err);
-      return dispatch({
+    .catch(err =>
+      dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      });
-    });
+      })
+    );
 };
 
 export const getTournament = id => dispatch => {
