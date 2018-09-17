@@ -22,7 +22,8 @@ class Brackets extends Component {
       player1: {},
       player2: {},
       player1_score: '',
-      player2_score: ''
+      player2_score: '',
+      matchupHistory: []
     };
     this.getPlayer = this.getPlayer.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -71,15 +72,26 @@ class Brackets extends Component {
     axios
       .get(`/api/tournament/${this.props.id}/matches/${matchId}`)
       .then(res => {
+        const player1 = this.getPlayer(res.data.player1_id);
+        const player2 = this.getPlayer(res.data.player2_id);
         this.setState({
-          player1: this.getPlayer(res.data.player1_id),
-          player2: this.getPlayer(res.data.player2_id)
+          player1,
+          player2
         });
         if (this.state.player2) {
-          this.setState({
-            showModal: true,
-            match: res.data
-          });
+          axios
+            .get(
+              `/api/stats/matchupHistory?alias1=${player1.name}&alias2=${
+                player2.name
+              }`
+            )
+            .then(history => {
+              this.setState({
+                showModal: true,
+                match: res.data,
+                matchupHistory: history.data
+              });
+            });
         }
       })
       .catch(err => console.log(err));
@@ -175,6 +187,7 @@ class Brackets extends Component {
                 <div className="col-sm-2">
                   <RatingGauge player={this.state.player1} />
                 </div>
+
                 <div className="col-sm-2">
                   <RatingGauge player={this.state.player2} />
                 </div>
@@ -206,6 +219,21 @@ class Brackets extends Component {
                   player2={this.state.player2}
                 />
               </div>
+              {this.state.matchupHistory.length > 0 && (
+                <div className="row justify-content-center">
+                  <b>Recent Games:</b>{' '}
+                  {this.state.matchupHistory.map(match => (
+                    <p>
+                      <span className="text-primary">
+                        {match.player1_score}
+                      </span>
+                      {' - '}
+                      <span className="text-danger">{match.player2_score}</span>
+                      |
+                    </p>
+                  ))}
+                </div>
+              )}
               {this.state.match.state !== 'complete' && (
                 <div>
                   <div className="form-row justify-content-center">

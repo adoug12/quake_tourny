@@ -27,8 +27,14 @@ router.post('/create', (req, res) => {
 
   tournament
     .create(req.body)
-    .then(data => res.json(data))
-    .catch(err => res.status(404).json(err));
+    .then(data => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(404).json(err);
+    });
 });
 
 router.get('/:id/participants', (req, res) => {

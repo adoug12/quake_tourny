@@ -93,12 +93,17 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="number"
-                className="form-control form-control-lg"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.signup_cap
+                })}
                 placeholder="Signup Cap"
                 name="signup_cap"
                 value={this.state.signup_cap}
                 onChange={this.onChange}
               />
+              {errors.signup_cap && (
+                <div className="invalid-feedback">{errors.signup_cap}</div>
+              )}
             </div>
             <div className="form-group">
               <input

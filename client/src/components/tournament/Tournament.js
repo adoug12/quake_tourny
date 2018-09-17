@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import moment from 'moment';
 import { getTournament } from '../../actions/tournamentActions';
 import { getParticipants } from '../../actions/participantsActions';
 
@@ -52,10 +53,15 @@ class Tournament extends Component {
       if (errors.tournament) {
         return <div>{errors.tournament}</div>;
       }
+      const startTime = moment(this.props.tournament.data.start_at);
       return (
-        <div className="container tournament-container">
-          <h4>{this.props.tournament.data.name}</h4>
-          <p>{this.props.tournament.data.description}</p>
+        <div className="container tournament-container mt-2">
+          <h3 className="text-primary">{this.props.tournament.data.name}</h3>
+          <p>
+            {startTime.format('h:mm a MMMM Do YYYY')}
+            <br />
+            {this.props.tournament.data.description}
+          </p>
           <ul className="nav nav-tabs">
             <li className="nav-item">
               <a

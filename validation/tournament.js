@@ -9,6 +9,9 @@ const validateTournament = tournamentData => {
     ? tournamentData.name
     : '';
   tournamentData.url = !isEmpty(tournamentData.url) ? tournamentData.url : '';
+  tournamentData.signup_cap = !isEmpty(tournamentData.signup_cap)
+    ? tournamentData.signup_cap
+    : '';
   tournamentData.start_at = !isEmpty(tournamentData.start_at)
     ? tournamentData.start_at
     : '';
@@ -31,6 +34,10 @@ const validateTournament = tournamentData => {
 
   if (Validator.isEmpty(tournamentData.url)) {
     errors.url = 'URL is required (enter random characters/digits).';
+  }
+
+  if (!Validator.isInt(tournamentData.signup_cap, { min: 4 })) {
+    errors.signup_cap = 'Participant cap must be greater than 3.';
   }
 
   if (!Validator.isISO8601(tournamentData.start_at)) {

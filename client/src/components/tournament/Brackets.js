@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { getRounds } from '../../actions/roundsActions';
 import Modal from 'react-modal';
 import axios from 'axios';
@@ -80,14 +81,28 @@ class Brackets extends Component {
                         key={match.identifier}
                         onClick={() => this.handleOpenModal(match.id)}
                       >
-                        <div className="bracket-team">
+                        <div
+                          className={classnames('bracket-team', {
+                            'text-success':
+                              match.winner_id === match.player1_id,
+                            'text-secondary':
+                              match.loser_id === match.player1_id
+                          })}
+                        >
                           <div className="bracket-name">
                             {match.player1_id &&
                               this.getPlayer(match.player1_id).name}
                           </div>
                           <div className="bracket-score">{player1_score}</div>
                         </div>
-                        <div className="bracket-team">
+                        <div
+                          className={classnames('bracket-team', {
+                            'text-success':
+                              match.winner_id === match.player2_id,
+                            'text-secondary':
+                              match.loser_id === match.player2_id
+                          })}
+                        >
                           <div className="bracket-name">
                             {match.player2_id &&
                               this.getPlayer(match.player2_id).name}
