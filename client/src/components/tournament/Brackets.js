@@ -16,7 +16,13 @@ Modal.setAppElement('#root');
 class Brackets extends Component {
   constructor() {
     super();
-    this.state = { showModal: false, match: {}, player1: {}, player2: {} };
+    this.state = {
+      showModal: false,
+      match: {},
+      player1: {},
+      player2: {},
+      matchupHistory: []
+    };
     this.getPlayer = this.getPlayer.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -34,18 +40,29 @@ class Brackets extends Component {
     axios
       .get(`/api/tournament/${this.props.id}/matches/${matchId}`)
       .then(res => {
+        const player1 = this.getPlayer(res.data.player1_id);
+        const player2 = this.getPlayer(res.data.player2_id);
         this.setState({
-          player1: this.getPlayer(res.data.player1_id),
-          player2: this.getPlayer(res.data.player2_id)
+          player1,
+          player2
         });
         if (this.state.player2) {
-          this.setState({
-            showModal: true,
-            match: res.data
-          });
+          axios
+            .get(
+              `/api/stats/matchupHistory?alias1=${player1.name}&alias2=${
+                player2.name
+              }`
+            )
+            .then(history => {
+              this.setState({
+                showModal: true,
+                match: res.data,
+                matchupHistory: history.data
+              });
+            });
         }
       })
-      .catch(err => console.log(err.response.data));
+      .catch(err => console.log(err));
   }
 
   handleCloseModal() {
@@ -185,6 +202,21 @@ class Brackets extends Component {
                   player2={this.state.player2}
                 />
               </div>
+              {this.state.matchupHistory.length > 0 && (
+                <div className="row justify-content-center">
+                  <b>Recent Games:</b>{' '}
+                  {this.state.matchupHistory.map(match => (
+                    <p>
+                      <span className="text-primary">
+                        {match.player1_score}
+                      </span>
+                      {' - '}
+                      <span className="text-danger">{match.player2_score}</span>
+                      |
+                    </p>
+                  ))}
+                </div>
+              )}
             </Modal>
           )}
         </div>

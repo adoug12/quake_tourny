@@ -53,7 +53,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="text"
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control', {
                   'is-invalid': errors.name
                 })}
                 placeholder="Name"
@@ -68,7 +68,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="text"
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control', {
                   'is-invalid': errors.url
                 })}
                 placeholder="URL"
@@ -83,7 +83,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="text"
-                className="form-control form-control-lg"
+                className="form-control"
                 placeholder="Description"
                 name="description"
                 value={this.state.description}
@@ -93,7 +93,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="number"
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control', {
                   'is-invalid': errors.signup_cap
                 })}
                 placeholder="Signup Cap"
@@ -108,7 +108,7 @@ class TournamentForm extends Component {
             <div className="form-group">
               <input
                 type="number"
-                className="form-control form-control-lg"
+                className="form-control"
                 placeholder="Check In Duration (minutes)"
                 name="check_in_duration"
                 value={this.state.check_in_duration}
@@ -119,7 +119,7 @@ class TournamentForm extends Component {
               <label htmlFor="startAt">Start At</label>
               <input
                 type="datetime-local"
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control', {
                   'is-invalid': errors.start_at
                 })}
                 name="start_at"
@@ -132,7 +132,7 @@ class TournamentForm extends Component {
             </div>
             <div className="form-group">
               <select
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control', {
                   'is-invalid': errors.time_zone
                 })}
                 name="time_zone"
