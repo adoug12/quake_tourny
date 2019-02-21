@@ -1,3 +1,4 @@
 node_modules
 qep.txt
 package-lock.json
+tools/challonge/config.json.dev
